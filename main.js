@@ -1,62 +1,47 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require("express");
+const blog = require("./Routes/Blog");
+const shop = require("./Routes/shop");
 
+const app = express();
+const port = 3000;
 
-app.use(express.static('public'))
+app.use(express.static("public"));
+app.use("/blog", blog);
+app.use("/shop" , shop)
 
-//app.get , or app.post , or app.put , or app.delete (path , handler)
-app.get('/', (req, res) => {
-  res.send('Hello World 22!')
+app.get("/", (req, res) => {
+    console.log("Hey its a Get request");
+    res.send("Hello Priyanshu Panwar");
+});
+
+app.post("/", (req, res) => {
+    console.log("Hey Its a Post request");
+    res.send("Hello Priyanshu Panwar from POST request");
+});
+
+app.put("/", (req, res) => {
+    console.log("Hey Its a Put request");
+    res.send("Hello Priyanshu Panwar from PUT request");
+});
+
+app.delete("/", (req, res) => {
+    console.log("Hey Its a delete request");
+    res.send("Hello Priyanshu Panwar from delete request");
+});
+
+app.get("/index" , (req ,res)=>{
+    console.log("Hey Priyanshu Panwar from Index Html Get Request");
+    // res.sendFile('E:/MERN STACK/MERN 4/Templates/index.html');
+    res.sendFile("Templates/index.html" , {root: __dirname})
+})
+
+app.get('/api' , (req , res)=>{
+    console.log("hey This is a JSON");
+    res.json({a : 1 , b:2 , c : 3 , d : 4 , e : 5 , "Name":"PRiyu"})
 })
 
 
-app.get('/about' , (req, res) => {
-    res.send('About Page')
-})
-
-app.get('/contact', (req, res) => {
-    res.send('Contact Page')
-})
-
-app.get('/products', (req, res) => {
-    res.send('Products Page')
-})
-
-app.get('/admin', (req, res) => {
-    res.send('Priyanshu Panwar ')
-})
-
-
-app.get('/blog' , (req, res) => {
-    res.send('Blog Page')
-})
-
-
-app.get("/blog/:slug" , (req , res )=>{
-    //logic to fetch {slug} from the db
-
-    console.log(req.params); //will output { slug: 'priya' }
-    console.log(req.query); //will output { mode: 'dark', 'region-in': ''}
-
-    
-    res.send(`hello ${req.params.slug}`)
-
-    // res.send(`hello ${req.params.slug}  and ${req.params.second}`)
-})
-
-
-
-// app.get("/blog/intro-to-js" , (req , res )=>{
-//     //logic to fetch intro to js from the db
-//     res.send("Intro to the Express Js in JavaScript")
-// })
-
-// app.get("/blog/intro-to-py" , (req , res )=>{
-//     //logic to fetch intro to py from the db
-//     res.send("Intro to the python")
-// })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+    console.log(`Port is running at ${port}`);
+});
