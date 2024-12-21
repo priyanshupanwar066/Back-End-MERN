@@ -1,47 +1,42 @@
 const express = require("express");
-const blog = require("./Routes/Blog");
-const shop = require("./Routes/shop");
-
 const app = express();
-const port = 3000;
+const port = 4000;
+const fs = require("fs");
+let date = new Date();
+const blog = require('./routes/blog')
 
-app.use(express.static("public"));
-app.use("/blog", blog);
-app.use("/shop" , shop)
+
+// app.use(express.static("public"));
+
+app.use('/blog', blog)
+
+
+//middleware one = logger for application
+app.use((req, res, next) => {
+    console.log(req.headers);
+    req.priyu = "I AM Priyanshu Panwar";
+  fs.appendFileSync("logs.txt", `${date} is a ${req.method}\n`);
+  console.log(`${date} is a ${req.method}`);
+  next();
+});
+
+//Middleware two
+app.use((req, res, next) => {
+  console.log("m2");
+  next();
+});
 
 app.get("/", (req, res) => {
-    console.log("Hey its a Get request");
-    res.send("Hello Priyanshu Panwar");
+  res.send("Hello World!");
 });
 
-app.post("/", (req, res) => {
-    console.log("Hey Its a Post request");
-    res.send("Hello Priyanshu Panwar from POST request");
+app.get("/about", (req, res) => {
+  res.send("About Page" + req.priyu);
 });
 
-app.put("/", (req, res) => {
-    console.log("Hey Its a Put request");
-    res.send("Hello Priyanshu Panwar from PUT request");
+app.get("/contact", (req, res) => {
+  res.send("Contact Page");
 });
-
-app.delete("/", (req, res) => {
-    console.log("Hey Its a delete request");
-    res.send("Hello Priyanshu Panwar from delete request");
-});
-
-app.get("/index" , (req ,res)=>{
-    console.log("Hey Priyanshu Panwar from Index Html Get Request");
-    // res.sendFile('E:/MERN STACK/MERN 4/Templates/index.html');
-    res.sendFile("Templates/index.html" , {root: __dirname})
-})
-
-app.get('/api' , (req , res)=>{
-    console.log("hey This is a JSON");
-    res.json({a : 1 , b:2 , c : 3 , d : 4 , e : 5 , "Name":"PRiyu"})
-})
-
-
-
 app.listen(port, () => {
-    console.log(`Port is running at ${port}`);
+  console.log(`Port is Running on ${port}`);
 });
