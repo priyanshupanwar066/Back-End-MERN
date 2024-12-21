@@ -1,27 +1,39 @@
-const express = require("express");
-const app = express();
-const port = 4000
+// You have to write the Node.js Programs TO clearn clutter inside of a diretory and organize the content of that directory into diffrenet folder
 
-app.set('view engine', 'ejs'); 
+// for example , these files becomes
 
-// https://github.com/mde/ejs/wiki/Using-EJS-with-Express
+// 1. name.jpg
+// 2. name.png
+// 3. this.pdf
+// 4. priyu.zip
+// 5. Panwar.jpg
 
+//this:
+// jpg/name.jpg , jpg/cat.jpg
 
-app.get('/', (req, res) => {
-    let siteName  = "Adidas"
-    let searchText = "Search Now"
-    let arr = [1 ,2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 , 11]
-    res.render('index', {siteName: siteName , searchText: searchText , arr})
-})
+// png/name.png
+// zip/priyu.zip , \\
 
+import fs from "fs/promises";
+import fsn from "fs";
+import path from "path";
 
+const basepath = "E:\\MERN STACK\\MERN 8";
 
-app.get ('/blog/:slug' , (req, res) => {
-    let blogTitle = "Adidas Why And When?"
-    let blogContent = "Adidas has been a global sportswear brand for over 20 years, with a strong commitment to innovation and sustainability. It started as a small clothing company in the 1970s, and has since diversified into various brands, including footwear, clothing, and accessories."
-    res.render('blogpost', {blogTitle: blogTitle , blogContent: blogContent})
-})
+let files = await fs.readdir(basepath);
 
-app.listen(port , ()=>{
-    console.log(`Port is running on ${port}`);
-})
+for (const item of files) {
+    console.log("running for" , item);
+    
+  let ext = item.split(".")[item.split(".").length - 1];
+  if (ext != "js" && ext != "json" && item.split(".").length > 1) {
+
+    
+    if (fsn.existsSync(path.join(basepath, ext))) {
+      //Move the file to this directory if its not the js and json files
+      fs.rename(path.join(basepath, item), path.join(basepath, ext, item));
+    } else {
+      fs.mkdir(ext);
+    }
+  }
+}
